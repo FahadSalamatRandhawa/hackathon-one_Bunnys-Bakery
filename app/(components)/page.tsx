@@ -1,5 +1,6 @@
 import Image from 'next/image'
-import HomePage from './compnents/HomePage/HomePage'
+import HomePage from './HomePage/page'
+import Link from 'next/link'
 
 export default function Home() {
   return (

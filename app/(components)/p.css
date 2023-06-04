@@ -1,0 +1,27 @@
+.scrl::-webkit-scrollbar-thumb {
+    background: #b73f0bdb;
+  }
+.scrl::-webkit-scrollbar {
+    height: 10px;
+  }
+
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb  {
+    background: #c24611e0;
+    opacity: 80%;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #C24611;
+    opacity: 80%;
+  }
+
+  @media only screen and (max-width: 768px) {
+    /* For mobile phones: */
+    .scrl::-webkit-scrollbar {
+    display: none;
+  }
+  }
