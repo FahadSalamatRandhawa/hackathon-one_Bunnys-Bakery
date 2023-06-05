@@ -7,5 +7,6 @@ export const CartTable=pgTable('carttable',{
     quantity:integer('quantity').notNull(),
     variant:varchar('variant').notNull(),
     price:varchar('price').notNull(),
-    pkey:varchar('pkey').notNull()
+    pkey:varchar('pkey').notNull(),
+    totalcost:varchar('totalcost').notNull()
 })

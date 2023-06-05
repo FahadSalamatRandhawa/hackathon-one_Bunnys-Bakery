@@ -22,7 +22,9 @@ export default function Cart(){
         }
     };
 
-    fetchData().then((dataa)=>console.log('data fetched in cart')).catch((err)=>console.log(err,'error in fetching cart'))
+    useEffect(()=>{
+        fetchData().then((dataa)=>console.log('data fetched in cart')).catch((err)=>console.log(err,'error in fetching cart'))
+    },[])
     
     
     return(

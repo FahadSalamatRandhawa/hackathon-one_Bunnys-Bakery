@@ -17,7 +17,8 @@ export default function PaymentLayout({
   return (
        
        <html lang="en">
-       <body className='h-screen bg-gradient-to-tr from-orange-400 via-orange-900 to-orange-800'>
+       <body className='h-screen bg-gradient-to-tr text-center from-orange-400 via-orange-900 to-orange-800'>
+        <div className=" text-3xl text-white font-semibold">We only accept cash on delivery</div>
          {children}
        </body>
      </html>

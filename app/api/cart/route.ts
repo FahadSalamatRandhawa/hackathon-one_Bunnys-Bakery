@@ -36,7 +36,8 @@ export const POST=async(request:NextRequest)=>{
         quantity:req.quantity,
         variant:req.variant,
         price:req.price,
-        pkey:req.pkey
+        pkey:req.pkey,
+        totalcost:(req.quantity*Number(req.price)).toFixed(2).toString()
     }
         
     try{
@@ -76,7 +77,7 @@ export const PUT=async (request:NextRequest)=>{
             try{
                 let count=0;
                 p.map((p)=>(count+=p.quantity))
-                const update=await db.update(CartTable).set({quantity:count+req.quantity}).where(and(eq(CartTable.user_id,cookiedId),eq(CartTable.pkey,req.pkey))).execute()
+                const update=await db.update(CartTable).set({quantity:count+req.quantity,totalcost:((count+req.quantity*Number(req.price)).toFixed(2)).toString()}).where(and(eq(CartTable.user_id,cookiedId),eq(CartTable.pkey,req.pkey))).execute()
                 if(req.quantity>0){
                     console.log('Increased')
                 }else{
@@ -96,10 +97,14 @@ export const PUT=async (request:NextRequest)=>{
 
 export const GET=async(request:NextRequest)=>{
     const myCookies=cookies();
-    const id=myCookies.get('user_id')?.value
-    
+    const id=myCookies.get("user_id")?.value
+    if(!id){
+        console.log(id)
+        return NextResponse.json({message:'no id found'},{status:401})
+    }
     //console.log(id,'in console')
     const b=await db.select().from(CartTable).where(gt(CartTable.quantity,0))
+    //console.log(b)
     return NextResponse.json({items:b})
 }
 

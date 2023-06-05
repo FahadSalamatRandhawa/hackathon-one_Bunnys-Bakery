@@ -115,7 +115,7 @@ export default function CartItemCard({item}:{item:CartItem}){
                     <div className=" text-xl md:text-2xl font-medium">{item.productName}</div>
                     <div className=" text-base font-medium">{item.category}</div>
                     </section>
-                    <div className=" text-lg font-extrabold">$ {price}</div>
+                    <div className=" text-lg font-extrabold">$ {Number((item.price as unknown as number * quantity).toFixed(2))}</div>
                 </div>
             </div>
 
