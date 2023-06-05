@@ -4,13 +4,15 @@ import { useContext, useEffect, useState } from "react";
 import { CartItem } from "@/app/api/cart/route";
 import { client } from "@/sanity/lib/client";
 import { useRouter } from "next/navigation";
-import { CostContext } from "../cartContext";
+import { CartContext, CartProvider, CostContext } from "../cartContext";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function CartItemCard({item}:{item:CartItem}){
 
     let [stock,setStock]=useState(0);
+    const {cost,setCost}=useContext(CostContext)
+    const {items,setItems}=useContext(CartContext)
     const router=useRouter()
     
     const refresh=useRouter()
@@ -28,6 +30,9 @@ export default function CartItemCard({item}:{item:CartItem}){
                     },
                     body:JSON.stringify({pkey:item.pkey})
                 })
+                if(quantity>0){
+                    setCost(cost-(item.quantity*Number(item.price)));
+                }
                 toast.error('Removed from cart!', {
                     position: "top-left",
                     autoClose: 5000,
@@ -48,11 +53,13 @@ export default function CartItemCard({item}:{item:CartItem}){
 
     const handleIncrease=async ()=>{
         if(quantity<stock){
-            setQuantity(quantity+1)
+            
             const inc=await fetch('/api/cart',{
                 method:'PUT',
-                body:JSON.stringify({quantity:1,pkey:item.pkey})
+                body:JSON.stringify({quantity:1,pkey:item.pkey,price:item.price})
             })
+            setCost(cost+Number(item.price))
+            setQuantity(quantity+1)
             console.log(inc)
         }else{
             toast.info('no more stock', {
@@ -71,15 +78,16 @@ export default function CartItemCard({item}:{item:CartItem}){
     }
     const handleDecrease=async ()=>{
         if(quantity>1){
-            setQuantity(quantity-1)
             const dec=await fetch('/api/cart',{
                 method:'PUT',
-                body:JSON.stringify({quantity:-1,pkey:item.pkey})
+                body:JSON.stringify({quantity:-1,pkey:item.pkey,price:item.price})
             })
-            //router.refresh()
+            setCost(cost-Number(item.price))
+            setQuantity(quantity-1)
             console.log(dec)
         }else{
             setQuantity(0)
+            setQuantity(quantity-1)
             await removeFromCart()
         }
         
@@ -87,13 +95,14 @@ export default function CartItemCard({item}:{item:CartItem}){
 
     let [quantity,setQuantity]=useState(item.quantity)
     let price=Number((item.price as unknown as number * quantity).toFixed(2))
-    //setCost(cost+price);
-    
 
     
     useEffect(()=>{
         getStock();
+        setCost(cost+price);
+        setItems(items+item.quantity)
     },[])
+    
 
     return(
         <div className="flex bg-[#D9D9D9]/30 h-[200px] justify-between p-5">
