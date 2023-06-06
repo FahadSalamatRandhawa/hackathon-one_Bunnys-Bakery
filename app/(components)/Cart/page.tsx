@@ -11,12 +11,15 @@ export default function Cart(){
     let [data, setData] = useState<{items:CartItem[]}>();
     let [cost,setCost]=useState(0)
     let [items,setItems]=useState(0)
+    const [loading,setLoading]=useState(true)
 
     const fetchData = async () => {
         try {
             const response = await fetch("/api/cart",{method:'GET',cache:'no-cache'});
             const data = await response.json();
             setData(data);
+            setLoading(false)
+            console.log(data)
         } catch (error) {
         console.error("Error fetching data:", error);
         }
@@ -39,17 +42,21 @@ export default function Cart(){
                         <div className=" grid grid-cols-1 md:w-[500px] xl:w-[600px] gap-5">
                         
                                 {
-                                    data?(data.items.map((item:CartItem)=>{
-                                        return (
-                                            <>
-                                            <CartContext.Provider value={{items,setItems}}>
-                                                <CostContext.Provider value={{cost,setCost}}>
-                                                    <CartItemCard item={item} />
-                                                </CostContext.Provider> 
-                                            </CartContext.Provider>
-                                            </>
-                                        )
-                                    })):null
+                                    loading?<>
+                                        <div className=" text-center text-lg">Loading ....</div>
+                                    </>:<>
+                                    {data&&data.items.length>0?(data.items.map((item:CartItem)=>{
+                                            return (
+                                                <>
+                                                <CartContext.Provider value={{items,setItems}}>
+                                                    <CostContext.Provider value={{cost,setCost}}>
+                                                        <CartItemCard item={item} />
+                                                    </CostContext.Provider> 
+                                                </CartContext.Provider>
+                                                </>
+                                            )
+                                        })):<div className=" text-center text-orange-400 text-xl">Basket is empty</div>}
+                                    </>
                                 }
                         </div>
                         

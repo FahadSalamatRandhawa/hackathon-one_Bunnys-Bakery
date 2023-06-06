@@ -20,6 +20,11 @@ export default function Items(){
     useEffect(()=>{
         fetchData().then((d)=>{console.log('fetched in checkout')}).catch((err)=>console.log('erro in checkout',err))
     },[])
+    if(!data){
+        return(
+            <div>Not cart items</div>
+        )
+    }
     return(
         <>
             <div className=" w-[400px] max-h-[500px] bg-gradient-to-bl from-slate-600/60 to-slate-400/20 grid grid-cols-1">

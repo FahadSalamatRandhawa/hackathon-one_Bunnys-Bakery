@@ -17,6 +17,9 @@ dependencies:
   '@sanity/vision':
     specifier: ^3.11.3
     version: 3.11.3(@babel/runtime@7.22.3)(@codemirror/lint@6.2.1)(@codemirror/state@6.2.1)(@codemirror/theme-one-dark@6.1.2)(@lezer/common@1.0.2)(codemirror@6.0.1)(react-dom@18.2.0)(react-is@18.2.0)(react@18.2.0)(styled-components@5.3.11)
+  '@stripe/stripe-js':
+    specifier: ^1.54.0
+    version: 1.54.0
   '@types/node':
     specifier: 20.2.4
     version: 20.2.4
@@ -2074,6 +2077,10 @@ packages:
     dependencies:
       base64url: 3.0.1
       tslib: 2.5.2
+    dev: false
+
+  /@stripe/stripe-js@1.54.0:
+    resolution: {integrity: sha512-nElTXkS+nMfDNMkWfLmyeqHQfMGJ1JjrjAVMibV61Oc/rYdUv0cKRYCi1l4ivZ5SySB3vQLcLolxbKBkbNznZA==}
     dev: false
 
   /@swc/helpers@0.5.1:
