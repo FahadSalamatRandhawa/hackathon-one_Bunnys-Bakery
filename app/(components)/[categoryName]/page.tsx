@@ -15,7 +15,7 @@ export default async function Breads({params}:{params:{categoryName:string}}){
 
     return(
         <>
-            <div className=" h-auto flex flex-row flex-wrap p-10 gap-x-5 items-start justify-between">
+            <div className=" h-auto flex flex-row flex-wrap p-10 gap-x-5 items-start justify-center md:justify-between">
                 {products?
                 products.map((product:IProduct)=>(
                     <Link href={`/${params.categoryName}/${product._key}`}>

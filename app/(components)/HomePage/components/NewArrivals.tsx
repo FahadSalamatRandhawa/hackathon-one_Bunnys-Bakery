@@ -17,7 +17,7 @@ export default function NewArrivals(){
 
                 {/* Coffee Section  */}
                 <div className=" w-4/5 h-1/2 flex justify-between items-center ">
-                    <div className=" w-[300px] h-[200px] font-italiana text-lg md:text-2xl">
+                    <div className=" w-[150px] md:w-[300px] h-[200px] break-words font-italiana text-lg md:text-2xl">
                         Enjoy the 2 new items that taste even better than they look
                     </div>
                     <Image src={'/coffee-removebg-preview.png'} width={300} height={200} alt='baegles' />
