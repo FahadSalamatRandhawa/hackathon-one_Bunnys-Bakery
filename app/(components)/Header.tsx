@@ -23,10 +23,8 @@ export default function Header({categories}:{categories:InterfaceCategory[]}){
                     
                 </div>
                 {/**<input className=" md:w-[300px] h-[35px] bg-no-repeat bg-gradient-to-r from-[#c03b02d8] from-10% to-orange-500/50 rounded-sm pl-5 text-white placeholder: font-medium placeholder:text-white placeholder:text-xl " placeholder=' Search item' /> */}
-                <div className=' flex flex-col place-items-start'>
-                    <CartProvider>
+                <div className=' flex flex-col place-items-start'> 
                         <CartCount/>
-                    </CartProvider>
                     <Link href='/Cart/'><Image className='' src={'/cart.svg'} width={100} height={100} alt='cart'/></Link>
                 </div>
             </div>

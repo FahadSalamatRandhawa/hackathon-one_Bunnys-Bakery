@@ -29,7 +29,7 @@ export default async function RootLayout({
   return (
       <CartProvider>
       <html lang="en">
-      <body className=" bg-fixed bg-contain bg-[url('/background.jpg')] backdrop-blur-sm backdrop-opacity-60" >
+      <body className=" bg-fixed bg-contain bg-[url('/background.jpg')] backdrop-blur-sm backdrop-opacity-70" >
        <Header categories={categories} />
         {children}
        <Footer/>

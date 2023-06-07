@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function Footer(){
     return (
         <>
-            <div className=" w-auto min-h-[200px] bg-[#D9D9D9]/30 flex flex-col md:flex-row justify-around items-center gap-y-5 py-5 mt-10 md:mt-[100px] ">
+            <div className=" w-auto min-h-[200px] bg-[#D9D9D9]/40 flex flex-col md:flex-row justify-around items-center gap-y-5 py-5 mt-10 md:mt-[100px] ">
 
                 <div className=" w-[300px]  block">
                     <text className=" text-2xl font-bold">Bunny's Bakery</text>

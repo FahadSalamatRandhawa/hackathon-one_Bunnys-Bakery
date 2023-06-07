@@ -11,11 +11,9 @@ import 'react-toastify/dist/ReactToastify.css';
 export default function CartItemCard({item}:{item:CartItem}){
 
     let [stock,setStock]=useState(0);
-    const {cost,setCost}=useContext(CostContext)
-    const {items,setItems}=useContext(CartContext)
     const router=useRouter()
-    
     const refresh=useRouter()
+
     async function getStock(){
         const s=await client.fetch(`*[_type=="BunnyBakery"][0]{categories[categoryName == "${item.category}"][0]{Products[_key=="${item.pkey}"][0]{stock}}}`).then((s:any)=>(setStock(s.categories?.Products.stock)))
         //console.log(s)
@@ -31,7 +29,7 @@ export default function CartItemCard({item}:{item:CartItem}){
                     body:JSON.stringify({pkey:item.pkey})
                 })
                 if(quantity>0){
-                    setCost(cost-(item.quantity*Number(item.price)));
+                    
                 }
                 toast.error('Removed from cart!', {
                     position: "top-left",
@@ -54,13 +52,18 @@ export default function CartItemCard({item}:{item:CartItem}){
     const handleIncrease=async ()=>{
         if(quantity<stock){
             
-            const inc=await fetch('/api/cart',{
-                method:'PUT',
-                body:JSON.stringify({quantity:1,pkey:item.pkey,price:item.price})
-            })
-            setCost(cost+Number(item.price))
-            setQuantity(quantity+1)
-            console.log(inc)
+            try{
+                const inc=await fetch('/api/cart',{
+                    method:'PUT',
+                    body:JSON.stringify({quantity:1,pkey:item.pkey,price:item.price})
+                })
+               
+                setQuantity(quantity+1)
+                
+                //console.log(inc)
+            }catch(err){
+                console.log(err)
+            }
         }else{
             toast.info('no more stock', {
                 position: "top-left",
@@ -73,8 +76,7 @@ export default function CartItemCard({item}:{item:CartItem}){
                 theme: "light",
                 });
         }
-        
-        
+        refresh.refresh()
     }
     const handleDecrease=async ()=>{
         if(quantity>1){
@@ -82,7 +84,7 @@ export default function CartItemCard({item}:{item:CartItem}){
                 method:'PUT',
                 body:JSON.stringify({quantity:-1,pkey:item.pkey,price:item.price})
             })
-            setCost(cost-Number(item.price))
+           
             setQuantity(quantity-1)
             console.log(dec)
         }else{
@@ -99,8 +101,7 @@ export default function CartItemCard({item}:{item:CartItem}){
     
     useEffect(()=>{
         getStock();
-        setCost(cost+price);
-        setItems(items+item.quantity)
+        
     },[])
     
 

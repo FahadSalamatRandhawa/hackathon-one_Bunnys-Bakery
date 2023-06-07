@@ -8,9 +8,12 @@ import { gt } from "drizzle-orm"
 
 export type CartItem=InferModel<typeof CartTable>
 
+export const GET=async()=>{
+    return NextResponse.json({publishkey:process.env.STRIPE_PUBLISH_KEY})
+}
 
-const stripe=new Stripe(process.env.STRIPE_SECRET_KEY!,{apiVersion:'2022-11-15'})
-export const GET=async(request:NextRequest)=>{
+export const POST=async(request:NextRequest)=>{
+    const stripe=new Stripe(process.env.STRIPE_SECRET_KEY as string,{apiVersion:'2022-11-15'})
     const myCookies=cookies();
     const id=myCookies.get('user_id')?.value;
     if(!id){
@@ -22,14 +25,15 @@ export const GET=async(request:NextRequest)=>{
 
         const b=await db.select().from(CartTable).where(and(eq(CartTable.user_id,id as string),gt(CartTable.quantity,0)))
         let amount=0;
-        b.map((i)=>(amount+=(i.quantity*Number.parseInt(i.price))))
-        const TotalAmount=amount
-        //console.log(b)
+        b.map((i)=>(amount+=Number((i.quantity*Number(i.price)))))
+        const TotalAmount=Math.round(amount);
+        console.log(TotalAmount)
+        
         try{
             const paymentIntent = await stripe.paymentIntents.create({
                 amount: TotalAmount,
                 currency: 'eur',
-                automatic_payment_methods:{enabled:true},
+                automatic_payment_methods: {enabled: true},
               })
               console.log('payment intent created')
               return NextResponse.json({clientSecret:paymentIntent.client_secret},{status:200})
@@ -39,7 +43,4 @@ export const GET=async(request:NextRequest)=>{
     }catch(err){
         return NextResponse.json({message:'Could not get cart items'},{status:403})
     }
-    
-
-    
 }

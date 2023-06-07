@@ -23,7 +23,9 @@ const builder=ImageUrlBuilder(client)
 
 export default async function({params}:{params:{categoryName:string,Product:string}}){
     const {categories}=await client.fetch(`*[_type=="BunnyBakery"][0]{categories[categoryName == "${params.categoryName}"][0]{Products[_key=="${params.Product}"][0]}}`);
-    
+    if(!categories?.Products){
+        <div>Sorry, could not find anything</div>
+    }
     const product:IFullProduct=categories?.Products
     //console.log(builder.image(product.extraImages[0].asset._ref).toString())
     //console.log(product.variants?.length);
@@ -36,7 +38,7 @@ export default async function({params}:{params:{categoryName:string,Product:stri
                 <div className="  w-full md:h-[500px] flex flex-col md:flex-row  px-5 gap-10 justify-center place-self-center">
                     <div className=" scrl scroll-m-6 pr-5 h-[150px] md:h-auto gap-3 overflow-scroll scroll-smooth flex flex-col flex-wrap lg:mr-10 will-change-scroll">
                        {
-                        product.extraImages.map((image)=>(
+                        product?.extraImages.map((image)=>(
                               <div className=" relative w-[150px] h-[150px]">
                                     <Image src={builder.image(image.asset._ref).toString()} fill className=" object-cover" alt="bread" />
                               </div>
@@ -50,10 +52,10 @@ export default async function({params}:{params:{categoryName:string,Product:stri
 
 
                     {/** Details */}
-                    <Filter categoryName={params.categoryName} Product={product} />
+                    <Filter categoryName={params?.categoryName} Product={product} />
                     
                 </div>
-                <Description details={product.details} />
+                <Description details={product?.details} />
             </div>
         </>
     )

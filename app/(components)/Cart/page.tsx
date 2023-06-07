@@ -1,10 +1,8 @@
 "use client"
 import { createContext,Dispatch,SetStateAction, useContext, useEffect, useState } from "react";
 import CartItemCard from "./components/CartItemCard"
-import { db } from "@/app/utils/database";
-import useSwr from 'swr'
 import { CartItem } from "@/app/api/cart/route";
-import { CartContext, CartProvider, CostContext } from "./cartContext";
+import Link from "next/link";
 
 export default function Cart(){
 
@@ -15,10 +13,14 @@ export default function Cart(){
 
     const fetchData = async () => {
         try {
+            let totalCost=0;let count=0;
             const response = await fetch("/api/cart",{method:'GET',cache:'no-cache'});
             const data = await response.json();
             setData(data);
             setLoading(false)
+            data.items.map((d:CartItem)=>{count+=d.quantity;totalCost+=(d.quantity*Number(d.price))})
+            setItems(count);
+            setCost(totalCost)
             console.log(data)
         } catch (error) {
         console.error("Error fetching data:", error);
@@ -45,14 +47,12 @@ export default function Cart(){
                                     loading?<>
                                         <div className=" text-center text-lg">Loading ....</div>
                                     </>:<>
-                                    {data&&data.items.length>0?(data.items.map((item:CartItem)=>{
+                                    {data&&data.items?(data.items.map((item:CartItem)=>{
                                             return (
                                                 <>
-                                                <CartContext.Provider value={{items,setItems}}>
-                                                    <CostContext.Provider value={{cost,setCost}}>
+                                                
                                                         <CartItemCard item={item} />
-                                                    </CostContext.Provider> 
-                                                </CartContext.Provider>
+                                                    
                                                 </>
                                             )
                                         })):<div className=" text-center text-orange-400 text-xl">Basket is empty</div>}
@@ -65,7 +65,7 @@ export default function Cart(){
                                 <text className=" flex justify-between"><text>Quantity</text><text>{items}</text></text>
                                 <text className=" flex justify-between"><text>Subtotal</text><text className="  font-bold">{cost.toFixed(2)}</text></text>
                                 <text className=" flex justify-between text-[#E29118]"><text>Estimated</text><text>2 days</text></text>
-                                <button className=" bg-[#C24611]/80 justify-self-center text-white p-2 w-max">Proceed to checkout</button>
+                                <button className=" bg-[#C24611]/80 justify-self-center text-white p-2 w-max"><Link href='/Checkout'>Proceed to checkout</Link></button>
                             </div>
                         
                     </div>
