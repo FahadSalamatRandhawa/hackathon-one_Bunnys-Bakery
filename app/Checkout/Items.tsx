@@ -33,12 +33,12 @@ export default function Items(){
             <div className=" md:w-[400px] h-max max-h-[400px] bg-gradient-to-bl from-slate-600/60 to-slate-400/20 grid grid-cols-1">
                 {
                     data?.items.map((d)=>(
-                        <div key={d.pkey} className=" flex justify-around h-10 md:gap-4 items-center px-2 border-y-white border-b-2">
+                        <div key={d.pkey} className=" flex justify-around h-10 md:gap-4 items-center px-2 border-y-white border-b-2 text-start">
                         <div className=" w-24 truncate">{d.productName}</div>
-                        <div>{d.category}</div>
-                        <div>{d.variant}</div>
-                        <div>{d.quantity} items</div> 
-                        <div>$ {d.quantity*Number(d.price)}</div>
+                        <div className=" w-24 truncate">{d.category}</div>
+                        <div className=" w-24 truncate">{d.variant}</div>
+                        <div className=" w-24 truncate">{d.quantity} items</div> 
+                        <div className=" w-24 truncate">$ {d.quantity*Number(d.price)}</div>
                     </div>
                     ))
                 }
