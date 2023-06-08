@@ -1,6 +1,7 @@
 'use client'
 import {useStripe,useElements,PaymentElement,LinkAuthenticationElement,AddressElement} from '@stripe/react-stripe-js'
-import { useState,useEffect, SetStateAction } from 'react'
+import { CartItem } from '../utils/schema/CartITem'
+import { useState,useEffect, SetStateAction } from 'react' 
 
 export default function CheckoutForm(){
     const stripe=useStripe()
@@ -45,7 +46,6 @@ export default function CheckoutForm(){
         if(!stripe || !elements){
             return;
         }
-
         setIsProcessing(true)
         const {error}=await stripe.confirmPayment({
             elements,
@@ -58,6 +58,9 @@ export default function CheckoutForm(){
               } else {
                 setMessage("An unexpected error occurred.");
               }
+        }else{
+
+            
         }
         
     }

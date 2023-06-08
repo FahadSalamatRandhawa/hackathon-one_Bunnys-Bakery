@@ -110,11 +110,14 @@ export const GET=async(request:NextRequest)=>{
 
 export const DELETE=async(request:NextRequest)=>{
     
+    const myCookies=cookies()
+    const cookiedId=myCookies.get('user_id')?.value as string
+
     const url=request.nextUrl
     const {searchParams}=url
     const key=searchParams.get('key')
     console.log(key,'cart')
-    const d=await db.delete(CartTable).where(eq(CartTable.pkey,key as string))
+    const d=await db.delete(CartTable).where(and(eq(CartTable.pkey,key as string),eq(CartTable.user_id,cookiedId)))
     //console.log(d)
 
     return NextResponse.json({message:'deleted'})

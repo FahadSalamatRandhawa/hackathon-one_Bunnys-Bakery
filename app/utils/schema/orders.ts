@@ -1,19 +1,14 @@
+import { InferModel } from "drizzle-orm";
 import { boolean, customType, integer, jsonb, pgTable, serial, text, varchar } from "drizzle-orm/pg-core";
 import { Inter } from "next/font/google";
 
-type ordersType={
-    name:string,
-    quantity:number,
-    price:string,
-    totalAmount:string
-}
-
+export type Order=InferModel<typeof Orders>
+export type OrderI=InferModel<typeof Orders,'insert'>
 export const Orders=pgTable('Orders',{
-    id:serial('id').primaryKey().notNull(),
-    address:varchar('address',{length:150}),
-    items:text('items[]'),
+    id:varchar('id').primaryKey().notNull(),
+    items:varchar('items'),
     price:varchar('price'),
+    quantity:integer('quantity').notNull(),
     customerName:varchar('customerName'),
-    fulfilled:boolean('fulfilled').notNull().default(false),
-
+    fulfilled:boolean('fulfilled').default(false),
 })

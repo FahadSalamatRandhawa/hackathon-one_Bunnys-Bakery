@@ -14,12 +14,6 @@ module.exports = {
         "2xl": "1400px",
       },
     },
-    fontFamily: {
-      'sans': ['ui-sans-serif', 'system-ui', ],
-      'serif': ['ui-serif', 'Georgia',],
-      'mono': ['ui-monospace', 'SFMono-Regular',],
-      'italiana':['Italiana']
-    },
     extend: {
       colors: {
         border: "hsl(var(--border))",

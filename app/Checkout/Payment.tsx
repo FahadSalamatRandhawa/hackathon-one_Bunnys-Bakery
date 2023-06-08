@@ -38,7 +38,7 @@ export default function Payment(){
                 if(!r.ok){setError(true);console.log('eror in client secret')}
                 setClientSecret(clientSecret);
             }).catch((err)=>{
-                console.log('api side issue',err.message)
+                console.log('stripe api side issue')
             })
         }catch(err){
             console.log('erro in stripePromise')

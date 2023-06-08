@@ -38,7 +38,7 @@ export default function Items(){
                         <div className=" w-24 truncate">{d.category}</div>
                         <div className=" w-24 truncate">{d.variant}</div>
                         <div className=" w-24 truncate">{d.quantity} items</div> 
-                        <div className=" w-24 truncate">$ {d.quantity*Number(d.price)}</div>
+                        <div className=" w-24 truncate">$ {Number(d.totalcost).toFixed(2)}</div>
                     </div>
                     ))
                 }
