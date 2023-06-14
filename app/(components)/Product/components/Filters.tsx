@@ -5,7 +5,6 @@ import PlusMinusButton from "./PlusMinusButton";
 import { ProductType } from "./ProductType";
 import { IFullProduct } from "../../[categoryName]/[Product]/page";
 import { countContext,variantsContext } from "./context";
-import { CartProvider } from "../../Cart/cartContext";
 
 export default function Filter({categoryName,Product}:{categoryName:string,Product:IFullProduct}){
     //console.log(Product)
