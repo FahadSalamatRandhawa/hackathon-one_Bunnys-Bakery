@@ -1,6 +1,5 @@
 'use client'
 import {useStripe,useElements,PaymentElement,LinkAuthenticationElement,AddressElement} from '@stripe/react-stripe-js'
-import { CartItem } from '../utils/schema/CartITem'
 import { useState,useEffect, SetStateAction } from 'react' 
 
 export default function CheckoutForm(){
@@ -15,30 +14,6 @@ export default function CheckoutForm(){
         if(!stripe){
             return;
         }
-    const clientSecret = new URLSearchParams(window.location.search).get(
-        "payment_intent_client_secret"
-      );
-  
-      if (!clientSecret) {
-        return;
-      }
-  
-      stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
-        switch (paymentIntent?.status) {
-          case "succeeded":
-            setMessage("Payment succeeded!");
-            break;
-          case "processing":
-            setMessage("Your payment is processing.");
-            break;
-          case "requires_payment_method":
-            setMessage("Your payment was not successful, please try again.");
-            break;
-          default:
-            setMessage("Something went wrong.");
-            break;
-        }
-      });
     }, [stripe]);
 
     const handleSubmit=async(e:any)=>{
@@ -59,8 +34,8 @@ export default function CheckoutForm(){
                 setMessage("An unexpected error occurred.");
               }
         }else{
-
-            
+            console.log('message in Checkout Form After Payment Confirm')
+            console.log(message)
         }
         
     }

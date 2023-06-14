@@ -1,5 +1,3 @@
-'use client'
-import Stripe from "stripe";
 import Items from "./Items";
 import Payment from "./Payment";
 

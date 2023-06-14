@@ -4,15 +4,22 @@ import { useContext, useEffect, useState } from "react";
 import { CartItem } from "@/app/api/cart/route";
 import { client } from "@/sanity/lib/client";
 import { useRouter } from "next/navigation";
-import { CartContext, CartProvider, CostContext } from "../cartContext";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../CartStorage/Store";
+import { CartAction } from "../CartStorage/CartSlice";
 
 export default function CartItemCard({item}:{item:CartItem}){
 
     let [stock,setStock]=useState(0);
+    const dispatch=useDispatch()
     const router=useRouter()
     const refresh=useRouter()
+    const totalCost=useSelector((state:RootState)=>state.CartSlice.TotalCost);
+    const totalItems=useSelector((state:RootState)=>state.CartSlice.items);
+    let [quantity,setQuantity]=useState(item.quantity)
+    let price=Number((item.price as unknown as number * quantity).toFixed(2))
 
     async function getStock(){
         const s=await client.fetch(`*[_type=="BunnyBakery"][0]{categories[categoryName == "${item.category}"][0]{Products[_key=="${item.pkey}"][0]{stock}}}`).then((s:any)=>(setStock(s.categories?.Products.stock)))
@@ -28,9 +35,12 @@ export default function CartItemCard({item}:{item:CartItem}){
                     },
                     body:JSON.stringify({pkey:item.pkey})
                 })
-                if(quantity>0){
-                    
-                }
+               if(quantity>0){
+                console.log('quantity in remove',quantity);
+                dispatch(CartAction.DecreaseTotalCost(quantity*Number(item.price)));
+                dispatch(CartAction.ItemAmountDecrease(quantity))
+                setQuantity(0)
+               }
                 toast.error('Removed from cart!', {
                     position: "top-left",
                     autoClose: 5000,
@@ -59,6 +69,8 @@ export default function CartItemCard({item}:{item:CartItem}){
                 })
                
                 setQuantity(quantity+1)
+                dispatch(CartAction.IncreaseTotalCost(Number(item.price)));
+                dispatch(CartAction.ItemIncrement())
                 
                 //console.log(inc)
             }catch(err){
@@ -79,27 +91,26 @@ export default function CartItemCard({item}:{item:CartItem}){
         refresh.refresh()
     }
     const handleDecrease=async ()=>{
-        if(quantity>1){
+        if(quantity>0){
             const dec=await fetch('/api/cart',{
                 method:'PUT',
                 body:JSON.stringify({quantity:-1,pkey:item.pkey,price:item.price})
             })
-           
+            dispatch(CartAction.DecreaseTotalCost(Number(item.price)));
+            dispatch(CartAction.ItemDecrease())
             setQuantity(quantity-1)
-            console.log(dec)
+            console.log(quantity)
         }else{
             setQuantity(0)
-            setQuantity(quantity-1)
-            await removeFromCart()
+            
         }
         
     }
 
-    let [quantity,setQuantity]=useState(item.quantity)
-    let price=Number((item.price as unknown as number * quantity).toFixed(2))
 
     
     useEffect(()=>{
+        
         getStock();
         
     },[])

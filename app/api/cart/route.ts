@@ -6,13 +6,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { CartTable } from "@/app/utils/schema/CartITem";
 import { v4 } from "uuid";
 import { cookies } from "next/headers";
-import { knex } from 'knex'
 
 import { db } from "@/app/utils/database";
-
-
-export type Order=InferModel<typeof Orders>;
-type newOrder=InferModel<typeof Orders,'insert'>;
 
 export type CartItem=InferModel<typeof CartTable>
 type NewCartItem=InferModel<typeof CartTable,'insert'>
@@ -37,9 +32,9 @@ export const POST=async(request:NextRequest)=>{
         variant:req.variant,
         price:req.price,
         pkey:req.pkey,
-        totalcost:(req.quantity*Number(req.price)).toFixed(2).toString()
+        totalcost:(req.quantity*Number(req.price)).toFixed(2)
     }
-        
+
     try{
 
             const p=await db.select().from(CartTable).where(and(eq(CartTable.user_id,cookiedId),eq(CartTable.pkey,req.pkey))).execute()
@@ -50,10 +45,15 @@ export const POST=async(request:NextRequest)=>{
                 return NextResponse.json({message:'Added to cart',data:cart})
             }
 
-            let count=0;
-            p.map((p)=>(count+=p.quantity))
-            const update=await db.update(CartTable).set({quantity:count+req.quantity}).where(and(eq(CartTable.user_id,cookiedId),eq(CartTable.pkey,req.pkey))).execute()
+            let newQuantity=p[0].quantity+req.quantity;let newTotalCost:string=(newQuantity*Number(req.price)).toFixed(2)
+            //p.map((p)=>(count+=p.quantity))
+            console.log('logging p in API/Cart/POST')
+            //console.log(p)
+            const update=await db.update(CartTable).set({quantity:newQuantity,totalcost:newTotalCost}).where(and(eq(CartTable.user_id,cookiedId),eq(CartTable.pkey,req.pkey))).returning()
             console.log('updateed')
+            //console.log(update)
+
+            return NextResponse.json({message:'updated existing item in cart',data:update})
             
         }catch(err){
             console.log('erro when adding new')
@@ -103,7 +103,7 @@ export const GET=async(request:NextRequest)=>{
         return NextResponse.json({message:'no id found'},{status:401})
     }
     //console.log(id,'in console')
-    const b=await db.select().from(CartTable).where(gt(CartTable.quantity,0))
+    const b=await db.select().from(CartTable).where(and(eq(CartTable.user_id,id),gt(CartTable.quantity,0)))
     //console.log(b)
     return NextResponse.json({items:b})
 }

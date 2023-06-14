@@ -3,24 +3,31 @@ import { createContext,Dispatch,SetStateAction, useContext, useEffect, useState 
 import CartItemCard from "./components/CartItemCard"
 import { CartItem } from "@/app/api/cart/route";
 import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "./CartStorage/Store";
+import { CartAction } from "./CartStorage/CartSlice";
 
 export default function Cart(){
-
+    const dispatch=useDispatch();
     let [data, setData] = useState<{items:CartItem[]}>();
-    let [cost,setCost]=useState(0)
-    let [items,setItems]=useState(0)
     const [loading,setLoading]=useState(true)
+    const totalCost=useSelector((state:RootState)=>state.CartSlice.TotalCost);
+    const totalItems=useSelector((state:RootState)=>state.CartSlice.items);
+    const storeCart=useSelector((state:RootState)=>state.CartSlice.Products)
+    
 
     const fetchData = async () => {
         try {
-            let totalCost=0;let count=0;
             const response = await fetch("/api/cart",{method:'GET',cache:'no-cache'});
             const data = await response.json();
             setData(data);
             setLoading(false)
-            data.items.map((d:CartItem)=>{count+=d.quantity;totalCost+=(d.quantity*Number(d.price))})
-            setItems(count);
-            setCost(totalCost)
+            data.items.map((d:CartItem)=>{
+                //dispatch(CartAction.ItemAmountIncrement(d.quantity))
+                //dispatch(CartAction.IncreaseTotalCost(Number(d.price)*Number(d.quantity)));
+                dispatch(CartAction.AddToCart(d))
+            })
+            console.log(storeCart);
             console.log(data)
         } catch (error) {
         console.error("Error fetching data:", error);
@@ -28,6 +35,7 @@ export default function Cart(){
     };
 
     useEffect(()=>{
+        dispatch(CartAction.ClearCart());
         fetchData().then((dataa)=>console.log('data fetched in cart')).catch((err)=>console.log(err,'error in fetching cart'))
     },[])
     
@@ -62,8 +70,8 @@ export default function Cart(){
                         
                             <div className=" grid grid-cols-1 gap-4 md:w-[300px] h-max bg-[#FAF2EB]/50 text-lg font-semibold p-5">
                                 <text className=" text-xl font-bold">Order Summary</text>
-                                <text className=" flex justify-between"><text>Quantity</text><text>{items}</text></text>
-                                <text className=" flex justify-between"><text>Subtotal</text><text className="  font-bold">{cost.toFixed(2)}</text></text>
+                                <text className=" flex justify-between"><text>Quantity</text><text>{totalItems}</text></text>
+                                <text className=" flex justify-between"><text>Subtotal</text><text className="  font-bold">{totalCost.toFixed(2)}</text></text>
                                 <text className=" flex justify-between text-[#E29118]"><text>Estimated</text><text>2 days</text></text>
                                 <button className=" bg-[#C24611]/80 justify-self-center text-white p-2 w-max"><Link href='/Checkout'>Proceed to checkout</Link></button>
                             </div>

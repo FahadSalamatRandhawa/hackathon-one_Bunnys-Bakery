@@ -42,7 +42,14 @@ export async function middleware(request:NextRequest){
     console.log('verified JWT in middleware')
         return response;
     }catch(err){
-        console.log('err',err)
+        const response=new NextResponse('Bad Token',{
+            status:401,
+            headers:{'content-type':'application/json'}
+        })
+        response.cookies.delete('accessToken')
+        NextResponse.redirect(new URL('/',request.url))
+        
+        return response;
     }
 }
 

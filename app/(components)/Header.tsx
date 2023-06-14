@@ -12,7 +12,7 @@ interface InterfaceCategory{
     Products:object
 }
 
-async function getUser(){
+function getUser(){
     const accessToken=cookies().get('accessToken')?.value;
     if(accessToken){
         const decodedToken:any=decode(accessToken);
@@ -22,8 +22,8 @@ async function getUser(){
     return;
 }
 
-export default async function Header({categories}:{categories:InterfaceCategory[]}){
-    const user=await getUser()
+export default function Header({categories}:{categories:InterfaceCategory[]}){
+    const user= getUser()
     console.log(user)
     return(
         <>

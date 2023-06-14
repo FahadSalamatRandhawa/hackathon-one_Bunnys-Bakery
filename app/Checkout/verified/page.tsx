@@ -2,24 +2,28 @@
 
 import { useEffect } from "react"
 import { CartItem } from "@/app/utils/schema/CartITem";
+import { insert } from "sanity";
 
 async function insert_orders(){
     const response = await fetch("/api/cart",{method:'GET',cache:'no-cache'});
-            const data = await response.json();
-            console.log('inserting orders')
+            const {items} = await response.json();
+            console.log('orders in verified page')
+            console.log(items)
+            const inserting=await fetch(`/api/AddOrder`,{method:'POST',body:JSON.stringify({items})});
+            if(!inserting.ok){
+                console.log('order insert error ni validate')
+                console.log(await inserting.json())
+            }
             try{
-                data.items.map(async(i:CartItem)=>{
-                const inserting=await fetch(`/api/Orders`,{method:'POST',body:JSON.stringify({item:i})});
-                console.log('after post')
-                console.log(inserting)
-                const deleting=await fetch(`/api/cart?key=${i.pkey}`,{
-                  method:'DELETE'
-                    })
-                console.log(deleting)
+                items.map(async(i:any)=>{
+                    let del=await fetch(`/api/cart?key=${i.pkey}`,{method:'DELETE'});
+                    if(!del.ok){
+                        console.log('could not delete pkey = ',i.pkey)
+                    }
+                    console.log('deleted cartItem with pkey:',i.pkey)
                 })
-                
             }catch(err){
-              console.log('error in insertint/del')
+                console.log('error in deleting orders')
             }
 }
 

@@ -1,20 +1,26 @@
 import { NextRequest,NextResponse } from "next/server";
-import { CartItem } from "../Stripe/route";
-import { db } from "@/app/utils/database";
-import { OrderI, Orders } from "@/app/utils/schema/orders";
 import { sql } from "@vercel/postgres";
 
 export const POST=async(request:NextRequest)=>{
     const req=await request.json()
-    const myItem:OrderI=req
 
-    console.log('insider post orders')
-    console.log(myItem)
-    
+    console.log('insider Add orders')
+    //console.log(req)
+    const itemsArray=req.items;
+    let totalCost:number=0;
+    let itemInsertQuery:string='';
+    itemsArray.map((i:any)=>{
+      itemInsertQuery+=`'{"name":"${i.productName}","quantity":"${i.quantity}","cost":"${i.totalcost}","pkey":"${i.pkey}"}'::json,`
+      totalCost+=Number(Number(i.totalcost).toFixed(2))
+    })
+    console.log(itemInsertQuery)
     try{
-      const dbOrder=await sql.query(`INSERT INTO Orders (id, items, price, quantity, customername, fulfilled)
-      VALUES(DEFAULT,'${myItem.items}', '${myItem.price}', ${myItem.quantity}, ${myItem.customerName},DEFAULT);
-      `)
+      const query=`INSERT INTO ORDERS (items, totalcost, Address)
+      VALUES(ARRAY[${itemInsertQuery.slice(0,-1)}],'${totalCost}','Address if here');
+      `
+      console.log(query)
+      const dbOrder=await sql.query(query)
+      console.log('order inserted ok')
       console.log(dbOrder)
     }catch(err){
       console.log('err in post order')

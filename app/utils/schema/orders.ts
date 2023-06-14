@@ -5,7 +5,7 @@ import { Inter } from "next/font/google";
 export type Order=InferModel<typeof Orders>
 export type OrderI=InferModel<typeof Orders,'insert'>
 export const Orders=pgTable('Orders',{
-    id:varchar('id').primaryKey().notNull(),
+    id:serial('id').primaryKey().notNull(),
     items:varchar('items'),
     price:varchar('price'),
     quantity:integer('quantity').notNull(),

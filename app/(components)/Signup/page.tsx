@@ -31,7 +31,7 @@ export default function Signup() {
         })
         const loginRes=await login.json()
         console.log(loginRes)
-        router.push('/')
+        router.push('/Admin')
       }catch(err){
         console.log('inside error')
         setError(true)

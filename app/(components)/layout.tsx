@@ -4,7 +4,7 @@ import Header from './Header'
 import Footer from './Footer'
 import './p.css'
 import { client } from '@/sanity/lib/client'
-import { CartProvider } from './Cart/cartContext'
+import Providers from './Cart/Provider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -27,14 +27,14 @@ export default async function RootLayout({
   //console.log(categories)
   
   return (
-      <CartProvider>
+    <Providers>
       <html lang="en">
       <body className=" bg-fixed bg-contain bg-[url('/background.jpg')] backdrop-blur-sm backdrop-opacity-70" >
-       <Header categories={categories} />
-        {children}
-       <Footer/>
+        <Header categories={categories} />
+          {children}
+        <Footer/>
       </body>
     </html>
-    </CartProvider>
+    </Providers>
   )
 }

@@ -14,7 +14,7 @@ export default function Items(){
             setData(data);
             let a=0;
             data.items.map((i:CartItem)=>((a+=Number(i.quantity*Number(i.price)))))
-            setAmount(a)
+            setAmount(Number(a.toFixed(2)))
             return data
         } catch (error) {
         console.error("Error fetching data:", error);

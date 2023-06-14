@@ -3,6 +3,7 @@ import Image from 'next/image'
 import './globals.css'
 import Link from 'next/link'
 import CartCount from '../(components)/Cart/components/cartCount'
+import Providers from '../(components)/Cart/Provider'
 export const dynamic='auto'
 
 
@@ -18,7 +19,7 @@ export default function PaymentLayout({
 }) {
   
   return (
-       
+       <Providers>
        <html lang="en">
        <body className='h-screen bg-gradient-to-tr text-center from-orange-400 via-orange-900 to-orange-800'>
           <div className=" text-3xl text-white font-semibold pb-5">We also accept cash on delivery</div>
@@ -29,5 +30,6 @@ export default function PaymentLayout({
          {children}
        </body>
      </html>
+     </Providers>
   )
 }
