@@ -5,21 +5,29 @@ import jwt from 'jsonwebtoken'
 import { NextRequest, NextResponse } from "next/server";
 import { v4 } from "uuid";
 
-type user=InferModel<typeof users,'select'>
-type userI=InferModel<typeof users,'insert'>
 export const POST=async(request:NextRequest)=>{
     const req=await request.json()
     const {email}=req;
     const {password}=req;
+    console.log(req)
     let user;
+
+    if(email==''||password==''){
+        console.log('empty email or passwrd in SigninAPI');
+        return NextResponse.json({
+            message:'user or email cannot empty',success:false
+        },{status:400})
+    }
+
     user=(await db.select().from(users).where(eq(users.email,email)))[0]
     if(!user){
         return NextResponse.json({message:'user not found',exits:false},{
             status:401
         })
     }
+    console.log('inside Signin API')
     user=(await db.select().from(users).where(and(eq(users.email,email),eq(users.password,password))))[0]
-    if(!user.email){
+    if(!user){
         return NextResponse.json({message:'wrong password',success:false},{
             status:401
         })

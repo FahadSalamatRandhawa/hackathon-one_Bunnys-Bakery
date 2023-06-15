@@ -31,6 +31,7 @@ export default function Admin(){
         try{
             const req=await fetch('/api/Orders',{cache:'no-store'});
             const {orders}:{orders:Order[]}=await req.json();
+            console.log(orders)
             setOrders(orders)
             setLoading(false)
             let order_count=0;
@@ -41,7 +42,7 @@ export default function Admin(){
                     rev+=Number(i.cost)
                 })
             })
-            setTotalOrders(totalOrders+1);
+            setTotalOrders(order_count);
             setRevenue(rev)
         }catch(err){
             console.log('error in fetching orders');

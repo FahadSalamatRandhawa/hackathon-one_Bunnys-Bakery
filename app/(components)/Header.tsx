@@ -12,7 +12,7 @@ interface InterfaceCategory{
     Products:object
 }
 
-function getUser(){
+export function getUser(){
     const accessToken=cookies().get('accessToken')?.value;
     if(accessToken){
         const decodedToken:any=decode(accessToken);
@@ -45,7 +45,7 @@ export default function Header({categories}:{categories:InterfaceCategory[]}){
                                 <CartCount/>
                             <Link href='/Cart/'><Image className='' src={'/cart.svg'} width={100} height={100} alt='cart'/></Link>
                     </div>
-                    <Link href='/Signup'><User user={user} /></Link>
+                    <User user={user} />
                 </div>
             </div>
         </>
