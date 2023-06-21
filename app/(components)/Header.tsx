@@ -29,9 +29,11 @@ export default function Header({categories}:{categories:InterfaceCategory[]}){
         <>
              <div className=' w-auto md:h-[80px] gap-y-10 py-2 flex flex-col md:flex-row items-center justify-between md:px-10 mb-[50px] bg-gradient-to-b from-[#c74e1aea] via-[#b56746d8] via-60% to-[#7e3719d1]'>
                 
-                <div>
+                <Link href={'/'}>
+                <div className=' text-white text-lg'>
                     Home
                 </div>
+                </Link>
                 
                 <div className=' flex flex-col md:flex-row gap-[10px] font-medium'>
                    {categories.map(({categoryName,_key})=>(
