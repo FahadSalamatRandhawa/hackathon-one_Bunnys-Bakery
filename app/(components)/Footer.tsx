@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function Footer(){
     return (
         <>
-            <div className=" w-auto min-h-[200px] bg-[#D9D9D9]/40 flex flex-col md:flex-row justify-around items-center gap-y-5 py-5 mt-10 md:mt-[100px] ">
+            <div className=" w-auto min-h-[200px] bg-[#D9D9D9]/40 flex flex-col sm:flex-row justify-around md:items-center gap-y-5 py-5 mt-10 md:mt-[100px] px-4 md:px-0 ">
 
                 <div className=" w-[300px]  block">
                     <text className=" text-2xl font-bold">Bunny's Bakery</text>
@@ -14,7 +14,7 @@ export default function Footer(){
                         <Image src='/linkedin.svg' alt="youtube" width={40} height={40} />
                     </div>
                 </div>
-                <div className=" w-auto h-min flex flex-wrap justify-center mt-5 gap-5 md:flex-row ">
+                <div className=" w-auto h-min flex flex-wrap justify-between sm:justify-center mt-5 gap-5 md:flex-row ">
                     <div className=" max-w-[250px] grid grid-cols-1 gap-2 font-medium">
                         <text className="  text-2xl text-[#000000]/60 font-bold ">Company</text>
                         <div>Legal </div>
