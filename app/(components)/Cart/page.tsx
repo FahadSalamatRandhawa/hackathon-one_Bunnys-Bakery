@@ -55,7 +55,7 @@ export default function Cart(){
                                     loading?<>
                                         <div className=" text-center text-lg">Loading ....</div>
                                     </>:<>
-                                    {data&&data.items?(data.items.map((item:CartItem)=>{
+                                    {data&&data.items.length>0?(data.items.map((item:CartItem)=>{
                                             return (
                                                 <>
                                                 

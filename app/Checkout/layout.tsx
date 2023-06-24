@@ -24,7 +24,7 @@ export default function PaymentLayout({
        <body className='h-screen bg-gradient-to-tr text-center from-orange-400 via-orange-900 to-orange-800'>
           <div className=" text-3xl text-white font-semibold pb-5">We also accept cash on delivery</div>
           <div className=' flex flex-col place-items-start'> 
-          <CartCount/>
+          
           <Link href='/Cart/'><Image className='' src={'/cart.svg'} width={100} height={100} alt='cart'/></Link>
           </div>
          {children}

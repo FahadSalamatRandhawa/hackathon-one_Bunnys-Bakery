@@ -15,12 +15,12 @@ export default async function Breads({params}:{params:{categoryName:string}}){
 
     return(
         <>
-            <div className=" h-auto flex flex-row flex-wrap p-10 gap-x-5 items-start justify-center sm:justify-evenly">
+            <div className=" min-h-screen flex flex-wrap p-10 gap-x-5 justify-evenly text-center ">
                 {products?
                 products.map((product:IProduct)=>(
                     <Link href={`/${params.categoryName}/${product._key}`}>
                     <ProductCard productMeta={product} key={product._key} /></Link>
-                )):<div className=" text-red-500">no products yet</div>    
+                )):<div className=" justify-self-center text-red-500">no products yet</div>    
             }
             </div>
         </>

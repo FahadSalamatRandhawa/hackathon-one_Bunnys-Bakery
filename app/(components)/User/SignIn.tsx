@@ -1,16 +1,20 @@
 'use client'
-import { Button } from "@/components/ui/button"
+
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
+
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useToast } from "@/components/ui/use-toast"
@@ -30,6 +34,7 @@ export function AdminSignIn() {
         if(email==''||password==''){
           return;
         }
+        setError(false)
         setLoading(true)
         const response=await fetch('/api/auth/Signup',{
         method:'POST',
@@ -52,35 +57,38 @@ export function AdminSignIn() {
         console.log(email,password)
         const loginRes=await login.json()
         console.log(loginRes)
+        if(!loginRes.ok){
+          setError(true)
+          setLoading(false)
+        }
         router.push('/Admin')
       }catch(err){
         console.log('inside error on login')
         console.log(err)
         setError(true)
-    }finally{
-      setLoading(false)
+        setLoading(false)
     }
     
   }
 
   return (
     <div>
-      <Dialog>
-      <DialogTrigger asChild>
+      <Sheet>
+      <SheetTrigger asChild>
         <Button variant="outline">Admin</Button>
-      </DialogTrigger>
-      <div className=" fixed">
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Admin Login</DialogTitle>
-          <DialogDescription>
+      </SheetTrigger >
+      <div className=" absolute ">
+      <SheetContent className="sm:max-w-[425px]">
+        <SheetHeader>
+          <SheetTitle>Admin Login</SheetTitle>
+          <SheetDescription>
             If you don't have an account a new one will be created for you!
-          </DialogDescription>
-        </DialogHeader>
+          </SheetDescription>
+        </SheetHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
-              Email
+              Username
             </Label>
             <Input id="email" type="email" className="col-span-3" onChange={(e)=>{setEmail(e.target.value)}} />
           </div>
@@ -91,13 +99,14 @@ export function AdminSignIn() {
             <Input id="password" type='password' className="col-span-3" onChange={(e)=>{setPassword(e.target.value)}}  />
           </div>
         </div>
-        <DialogFooter>
+        <SheetFooter>
           {loading&&<div className=" outline-1 outline-blue-400">{newUser?<div>Creating new user</div>:'Processing'}</div>}
+          {error&&<div className=" text-red-500" >Password may be wrong </div>}
           <Button onClick={SignupANDSignin} disabled={loading} type="submit" className="  bg-gradient-to-br from-orange-300 to-orange-700/80">Signin</Button>
-        </DialogFooter>
-      </DialogContent>
+        </SheetFooter>
+      </SheetContent>
       </div>
-    </Dialog>
+    </Sheet>
     </div>
   )
 }

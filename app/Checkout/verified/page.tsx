@@ -1,8 +1,5 @@
 'use client'
-
-import { useEffect } from "react"
-import { CartItem } from "@/app/utils/schema/CartITem";
-import { insert } from "sanity";
+import { useEffect } from "react";
 
 async function insert_orders(){
     const response = await fetch("/api/cart",{method:'GET',cache:'no-cache'});
@@ -29,8 +26,9 @@ async function insert_orders(){
 
 export default function verified(){
     useEffect(()=>{
-        insert_orders()
+        insert_orders().then(()=>{'inserted'})
     },[])
+    
     return (
         <div>
             Verified payment

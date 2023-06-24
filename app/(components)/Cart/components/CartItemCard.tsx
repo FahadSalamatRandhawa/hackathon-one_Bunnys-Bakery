@@ -14,12 +14,10 @@ export default function CartItemCard({item}:{item:CartItem}){
 
     let [stock,setStock]=useState(0);
     const dispatch=useDispatch()
-    const router=useRouter()
     const refresh=useRouter()
     const totalCost=useSelector((state:RootState)=>state.CartSlice.TotalCost);
     const totalItems=useSelector((state:RootState)=>state.CartSlice.items);
     let [quantity,setQuantity]=useState(item.quantity)
-    let price=Number((item.price as unknown as number * quantity).toFixed(2))
 
     async function getStock(){
         const s=await client.fetch(`*[_type=="BunnyBakery"][0]{categories[categoryName == "${item.category}"][0]{Products[_key=="${item.pkey}"][0]{stock}}}`).then((s:any)=>(setStock(s.categories?.Products.stock)))
@@ -68,9 +66,10 @@ export default function CartItemCard({item}:{item:CartItem}){
                     body:JSON.stringify({quantity:1,pkey:item.pkey,price:item.price})
                 })
                
-                setQuantity(quantity+1)
+                
                 dispatch(CartAction.IncreaseTotalCost(Number(item.price)));
                 dispatch(CartAction.ItemIncrement())
+                setQuantity(quantity+1)
                 
                 //console.log(inc)
             }catch(err){
@@ -102,11 +101,9 @@ export default function CartItemCard({item}:{item:CartItem}){
             console.log(quantity)
         }else{
             setQuantity(0)
-            
         }
         
     }
-
 
     
     useEffect(()=>{
