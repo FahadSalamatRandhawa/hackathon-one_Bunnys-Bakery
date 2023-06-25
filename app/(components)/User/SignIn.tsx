@@ -56,12 +56,15 @@ export function AdminSignIn() {
         })
         console.log(email,password)
         const loginRes=await login.json()
-        console.log(loginRes)
-        if(!loginRes.ok){
+        console.log(login)
+        if(!login.ok){
           setError(true)
           setLoading(false)
+        }else{
+          setError(false);
+          router.push('/Admin')
         }
-        router.push('/Admin')
+        
       }catch(err){
         console.log('inside error on login')
         console.log(err)
